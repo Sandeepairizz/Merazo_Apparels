@@ -1,0 +1,110 @@
+---
+// HorizontalShowcase.astro — Part E-04
+// Pinned horizontal scroll across 5 large campaign panels:
+// Oxford, Linen, Overshirt, Poplin, Satin.
+// Ghost numbers, H2, one-line desc, shop link, bottom accent progress bar.
+---
+
+<section class="showcase" id="showcase" aria-label="Campaign collection showcase">
+
+  <!-- Progress bar -->
+  <div class="showcase__progress" id="showcase-progress" aria-hidden="true"></div>
+
+  <!-- Sticky viewport container -->
+  <div class="showcase__sticky">
+
+    <!-- Horizontal track -->
+    <div class="showcase__track" id="showcase-track">
+
+      {[
+        {
+          num: '01',
+          name: 'OXFORD',
+          desc: 'The original. Heavyweight structured drape, breathable, built for decades.',
+          image: '/images/showcase/oxford.webp',
+          avif:  '/images/showcase/oxford.avif',
+          color: '#15191F',
+        },
+        {
+          num: '02',
+          name: 'LINEN',
+          desc: "Summer's definitive answer to permanence. Pure unadulterated European flax.",
+          image: '/images/showcase/linen.webp',
+          avif:  '/images/showcase/linen.avif',
+          color: '#211D18',
+        },
+        {
+          num: '03',
+          name: 'OVERSHIRT',
+          desc: 'Worn open. Worn closed. Worn always. Dense cotton twill cut for layering.',
+          image: '/images/showcase/overshirt.webp',
+          avif:  '/images/showcase/overshirt.avif',
+          color: '#1C2018',
+        },
+        {
+          num: '04',
+          name: 'POPLIN',
+          desc: 'Paper-light, architectural crispness. Obsidian blacks that never wash out.',
+          image: '/images/showcase/poplin.webp',
+          avif:  '/images/showcase/poplin.avif',
+          color: '#1A1817',
+        },
+        {
+          num: '05',
+          name: 'SATIN',
+          desc: 'Where tailoring meets evening. Subtle silk lustre and mother-of-pearl buttons.',
+          image: '/images/showcase/satin.webp',
+          avif:  '/images/showcase/satin.avif',
+          color: '#1C1822',
+        },
+      ].map((panel) => (
+        <div class="showcase__panel" style={`background-color:${panel.color};`} role="group" aria-label={`${panel.name} — ${panel.desc}`}>
+
+          <!-- Background picture -->
+          <div class="showcase__panel-bg">
+            <picture>
+              <source srcset={panel.avif} type="image/avif" />
+              <source srcset={panel.image} type="image/webp" />
+              <img
+                src={panel.image}
+                alt={`${panel.name} shirt campaign editorial`}
+                width="1920"
+                height="1080"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          </div>
+
+          <div class="showcase__panel-overlay" aria-hidden="true"></div>
+          <div class="showcase__panel-num" aria-hidden="true">{panel.num}</div>
+
+          <!-- Content -->
+          <div class="showcase__panel-content">
+            <p class="text-mono" style="color:var(--muted-dark);margin-bottom:0.75rem;">03 / 08 · CAMPAIGN · {panel.num} OF 05</p>
+            <h1 class="showcase__panel-h2 display-grotesk">{panel.name}</h1>
+            <p class="showcase__panel-desc">{panel.desc}</p>
+
+            <!-- Shop link -->
+            <div style="margin-top: 2rem;">
+              <a
+                href="#collection"
+                class="btn btn--filled"
+                style="background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);color:#FFFFFF;"
+                aria-label={`Shop ${panel.name} collection`}
+              >
+                <span>Shop {panel.name}</span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+  </div>
+
+</section>

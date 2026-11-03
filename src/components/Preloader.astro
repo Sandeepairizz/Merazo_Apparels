@@ -1,0 +1,76 @@
+---
+// Preloader.astro
+// Black screen with counter, stacked photo cards, and brand wordmark wipe.
+// Slides up via clip-path to reveal the hero beneath.
+// Skipped on repeat visits via sessionStorage.
+---
+<div id="preloader" aria-hidden="true" role="presentation">
+
+  <!-- Stacked photo cards (shuffle in) -->
+  <div class="preloader__cards">
+    <!-- Red accent card (back) -->
+    <div class="preloader__card preloader__card--red"
+         style="transform: rotate(-6deg) translate(-10%, 5%);">
+    </div>
+
+    <!-- Editorial photo cards — paths are placeholders; swap with real images -->
+    <div class="preloader__card"
+         style="transform: rotate(4deg) translate(8%, -4%); background: #1a1a1a; overflow:hidden;">
+      <img
+        src="/images/preloader/card-1.jpg"
+        alt=""
+        width="280" height="373"
+        style="width:100%;height:100%;object-fit:cover;opacity:0.85;"
+        loading="eager"
+      />
+    </div>
+
+    <div class="preloader__card"
+         style="transform: rotate(-3deg) translate(-6%, 8%); background: #111; overflow:hidden;">
+      <img
+        src="/images/preloader/card-2.jpg"
+        alt=""
+        width="280" height="373"
+        style="width:100%;height:100%;object-fit:cover;opacity:0.85;"
+        loading="eager"
+      />
+    </div>
+
+    <div class="preloader__card"
+         style="transform: rotate(7deg) translate(12%, 2%); background: #0d0d0d; overflow:hidden;">
+      <img
+        src="/images/preloader/card-3.jpg"
+        alt=""
+        width="280" height="373"
+        style="width:100%;height:100%;object-fit:cover;opacity:0.85;"
+        loading="eager"
+      />
+    </div>
+  </div>
+
+  <!-- Counter 000 → 100 -->
+  <div class="preloader__counter" aria-live="polite">000</div>
+
+  <!-- Brand wordmark wipe -->
+  <div class="preloader__wordmark">MERAZO</div>
+
+</div>
+
+<style>
+  /* Preloader fills the viewport, sits above everything */
+  #preloader {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 10000;
+    overflow: hidden;
+    /* Initial clip-path — animate out in GSAP */
+    clip-path: inset(0 0 0% 0);
+  }
+  #preloader.hidden {
+    display: none !important;
+  }
+</style>
+
+
+

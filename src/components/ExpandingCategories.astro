@@ -1,0 +1,85 @@
+---
+// ExpandingCategories.astro — Part E-05
+// 3 tall panels: Classic / Relaxed / Tailored
+// flex-grow expansion on hover + image zoom + text reveal
+// Mobile: stacks vertically as an accordion
+---
+
+<section class="categories section" id="categories" aria-label="Shop shirts by fit">
+  <div class="container">
+
+    <div class="section-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;">
+      <p class="text-mono" style="color:var(--muted-dark);">06 / 08 · PROPORTIONS</p>
+      <div data-reveal-heading>
+        <h1 class="display-grotesk text-h1" style="color:var(--white);text-align:right;">
+          <span class="mask" style="display:block;"><span class="mask-inner">FIND YOUR</span></span>
+          <span class="mask" style="display:block;"><span class="mask-inner text-accent">FIT.</span></span>
+        </h1>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Full-width category expanding panels -->
+  <div class="categories__grid" role="list" aria-label="Shirt cut categories">
+
+    {[
+      {
+        id: 'classic',
+        label: '01',
+        name: 'CLASSIC',
+        desc: 'Crisp collar and torso with timeless, tailored proportions.',
+        image: '/images/categories/classic.webp',
+        avif:  '/images/categories/classic.avif',
+        href: '#collection',
+      },
+      {
+        id: 'relaxed',
+        label: '02',
+        name: 'RELAXED',
+        desc: 'Oversized silhouette cut for continuous ease and fluid motion.',
+        image: '/images/categories/relaxed.webp',
+        avif:  '/images/categories/relaxed.avif',
+        href: '#collection',
+      },
+      {
+        id: 'tailored',
+        label: '03',
+        name: 'TAILORED',
+        desc: 'Precision taper across chest and waist for modern, sharp lines.',
+        image: '/images/categories/tailored.webp',
+        avif:  '/images/categories/tailored.avif',
+        href: '#collection',
+      },
+    ].map((cat) => (
+      <a
+        href={cat.href}
+        class="category-panel"
+        role="listitem"
+        aria-label={`${cat.name} fit — ${cat.desc}`}
+        data-cursor="image"
+      >
+        <picture>
+          <source srcset={cat.avif} type="image/avif" />
+          <source srcset={cat.image} type="image/webp" />
+          <img
+            src={cat.image}
+            alt={`${cat.name} fit shirt editorial`}
+            width="1200"
+            height="1600"
+            loading="lazy"
+            decoding="async"
+          />
+        </picture>
+        <div class="category-panel__overlay" aria-hidden="true"></div>
+        <div class="category-panel__content">
+          <p class="category-panel__label">{cat.label} / 03 FIT SPEC</p>
+          <h1 class="category-panel__name display-grotesk">{cat.name}</h1>
+          <p style="font-size:0.875rem;color:rgba(255,255,255,0.7);margin-top:0.35rem;max-width:32ch;">{cat.desc}</p>
+          <p class="category-panel__cta">Explore Cut →</p>
+        </div>
+      </a>
+    ))}
+
+  </div>
+</section>

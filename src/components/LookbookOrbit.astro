@@ -1,0 +1,67 @@
+﻿---
+// LookbookOrbit.astro
+// White studio section: model cutout centered,
+// detail cards (collars, cuffs, buttons, fabric) orbiting on a curved path.
+// Orbit rotation driven by scroll scrub via GSAP.
+---
+
+<section class="lookbook section" id="lookbook" aria-label="Lookbook and details"
+  data-section-color="#FFFFFF" data-section-text="#0A0A0A">
+  <div class="container">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:clamp(2rem,4vw,4rem);">
+      <p class="text-mono">05 / LOOKBOOK</p>
+      <div data-reveal-heading>
+        <h2 class="text-display text-h2" style="text-align:right;">
+          <span class="mask" style="display:block;"><span class="mask-inner">IN THE</span></span>
+          <span class="mask" style="display:block;"><span class="mask-inner"><span class="text-accent">DETAILS.</span></span></span>
+        </h2>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Orbit stage: full width -->
+  <div class="lookbook__stage">
+
+    <!-- Center model cutout -->
+    <div class="lookbook__model">
+      <img
+        src="/images/lookbook/model-cutout.png"
+        alt="Merazo model wearing Oxford shirt"
+        width="600"
+        height="900"
+        loading="lazy"
+        decoding="async"
+        data-cursor="image"
+      />
+    </div>
+
+    <!-- Orbit cards: GSAP positions and rotates these -->
+    {[
+      { label: 'Spread Collar', image: '/images/details/collar.jpg', angle: 0 },
+      { label: 'French Cuff',   image: '/images/details/cuff.jpg',   angle: 72 },
+      { label: 'Shell Button',  image: '/images/details/button.jpg', angle: 144 },
+      { label: 'Poplin Weave',  image: '/images/details/weave.jpg',  angle: 216 },
+      { label: 'French Seam',   image: '/images/details/seam.jpg',   angle: 288 },
+    ].map((card) => (
+      <div class="orbit-card" aria-label={card.label}>
+        <img
+          src={card.image}
+          alt={card.label}
+          class="orbit-card__img"
+          width="160"
+          height="160"
+          loading="lazy"
+          decoding="async"
+        />
+        <p class="orbit-card__label">{card.label}</p>
+      </div>
+    ))}
+
+  </div>
+
+</section>
+
+
+

@@ -1,0 +1,274 @@
+---
+// src/components/CraftSection.astro
+// CRAFT — Performance by Design
+// Sticky image on LEFT side, scrolling list on RIGHT side.
+// As user scrolls through the features on the right, the left image changes smoothly.
+
+interface CraftItem {
+  num: string;
+  name: string;
+  desc: string;
+  imgWebp: string;
+  imgAvif: string;
+  alt: string;
+}
+
+const craftItems: CraftItem[] = [
+  {
+    num: '01',
+    name: 'Long-Staple Cotton',
+    desc: 'Egyptian Giza and American Pima extra-long staple fibres. Woven densely so the hand-feel softens with every single wash while fibers retain tensile integrity.',
+    imgWebp: '/images/craft/linen-weave.webp',
+    imgAvif: '/images/craft/linen-weave.avif',
+    alt: 'Long-staple cotton and linen weave texture',
+  },
+  {
+    num: '02',
+    name: 'Mother-of-Pearl Buttons',
+    desc: 'Carved from Australian Pinctada maxima pearl shells. Naturally heat-resistant, cross-stitched with reinforced shank wrapping so buttons never detach.',
+    imgWebp: '/images/craft/buttons.webp',
+    imgAvif: '/images/craft/buttons.avif',
+    alt: 'Mother-of-pearl buttons detail',
+  },
+  {
+    num: '03',
+    name: 'French Seams',
+    desc: 'Every raw fabric edge is encased in a clean double fold at 18 stitches per inch. Internal chafing is eliminated; strength is completely invisible.',
+    imgWebp: '/images/craft/french-seam.webp',
+    imgAvif: '/images/craft/french-seam.avif',
+    alt: 'French seams craftsmanship',
+  },
+  {
+    num: '04',
+    name: 'Pre-Washed Fit',
+    desc: 'Pre-shrunk and garment-washed before hand-finishing. The exact fit, drape, and collar circumference you receive on day one is what endures for years.',
+    imgWebp: '/images/craft/cotton-fold.webp',
+    imgAvif: '/images/craft/cotton-fold.avif',
+    alt: 'Pre-washed shirt fit and drape',
+  },
+];
+---
+
+<section class="craft section" id="craft" aria-label="Craft and construction details">
+  <div class="container">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <p class="text-mono" style="margin-bottom:1rem;color:var(--muted);">07 / 08 · CRAFT</p>
+      <div data-reveal-heading>
+        <h1 class="display-grotesk text-h1">
+          <span class="mask" style="display:block;"><span class="mask-inner">PERFORMANCE BY</span></span>
+          <span class="mask" style="display:block;"><span class="mask-inner text-accent">DESIGN.</span></span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Two-column layout: Sticky Image on LEFT, Scrolling List on RIGHT -->
+    <div class="craft__layout">
+
+      <!-- LEFT: Sticky Image Stage -->
+      <div class="craft__left-col">
+        <div class="craft__sticky-frame" aria-hidden="true">
+          {craftItems.map((item, i) => (
+            <picture class={`craft__picture ${i === 0 ? 'active' : ''}`} data-craft-target={i}>
+              <source srcset={item.imgAvif} type="image/avif" />
+              <img
+                src={item.imgWebp}
+                alt={item.alt}
+                class="craft__img"
+                width="1200"
+                height="1500"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            </picture>
+          ))}
+          <div class="craft__frame-badge text-mono" id="craft-badge">
+            <span>SPEC 01 / 04: LONG-STAPLE COTTON</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Scrolling Story Items -->
+      <div class="craft__right-col" role="list" aria-label="Craftsmanship features">
+        {craftItems.map((item, i) => (
+          <div
+            class={`craft__item ${i === 0 ? 'active' : ''}`}
+            role="listitem"
+            data-craft-index={i}
+            aria-selected={i === 0}
+          >
+            <div class="craft__item-bar" aria-hidden="true"></div>
+            <p class="craft__item-num text-mono">{item.num} / 04</p>
+            <h3 class="craft__item-name">{item.name}</h3>
+            <p class="craft__item-desc">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .craft {
+    background: var(--white, #FFFFFF);
+    padding-block: clamp(5rem, 10vw, 9rem);
+    position: relative;
+  }
+
+  .craft__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 6rem);
+    align-items: start;
+    margin-top: clamp(2rem, 4vw, 4rem);
+  }
+
+  /* LEFT: Sticky container */
+  .craft__left-col {
+    position: sticky;
+    top: 96px;
+    height: fit-content;
+  }
+
+  .craft__sticky-frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    background: var(--off-white, #F6F5F2);
+    border: 1px solid rgba(10, 10, 10, 0.08);
+    overflow: hidden;
+    border-radius: 2px;
+  }
+
+  .craft__picture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s ease;
+    z-index: 1;
+  }
+
+  .craft__picture.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 3;
+  }
+
+  .craft__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(1.05);
+  }
+
+  .craft__picture.active .craft__img {
+    transform: scale(1);
+  }
+
+  .craft__frame-badge {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 5;
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(8px);
+    color: var(--white, #FFFFFF);
+    padding: 0.35rem 0.75rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* RIGHT: Scrolling Content */
+  .craft__right-col {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5vh;
+  }
+
+  .craft__item {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top: 1px solid rgba(10, 10, 10, 0.1);
+    padding-block: clamp(2.5rem, 6vh, 4rem);
+    cursor: pointer;
+    transition: opacity 0.35s ease;
+  }
+
+  .craft__item:last-child {
+    border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+  }
+
+  .craft__item-bar {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent, #E10600);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .craft__item.active .craft__item-bar {
+    width: 100%;
+  }
+
+  .craft__item-num {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--muted, #6B6B6B);
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+
+  .craft__item.active .craft__item-num {
+    color: var(--accent, #E10600);
+  }
+
+  .craft__item-name {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-size: clamp(1.4rem, 2.5vw, 2.25rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    font-kerning: normal;
+    color: var(--ink, #0A0A0A);
+    transition: color 0.3s;
+  }
+
+  .craft__item.active .craft__item-name {
+    color: var(--accent, #E10600);
+  }
+
+  .craft__item-desc {
+    margin-top: 0.85rem;
+    font-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    line-height: 1.65;
+    color: var(--muted, #6B6B6B);
+    max-width: 48ch;
+  }
+
+  @media (max-width: 768px) {
+    .craft__layout {
+      grid-template-columns: 1fr;
+    }
+    .craft__left-col {
+      position: relative;
+      top: 0;
+    }
+    .craft__item {
+      min-height: auto;
+      padding-block: 2rem;
+    }
+  }
+</style>

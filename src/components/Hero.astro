@@ -1,0 +1,817 @@
+---
+// src/components/Hero.astro
+// Merazo — Full-Screen Auto-Playing GSAP Horizontal Slider Hero
+// 6 full-bleed slides (100vw x 100svh), flat right->left push, inner image parallax,
+// per-slide distinct editorial typography, 6-segment progress line, glass store tile.
+
+interface Slide {
+  id: number;
+  theme: 'light' | 'dark';
+  navTheme: 'light' | 'dark';
+  desktopWebp: string;
+  desktopAvif: string;
+  mobileWebp: string;
+  mobileAvif: string;
+  tag?: string;
+  monoSub: string;
+  ctaText: string;
+  ctaHref: string;
+}
+
+const slides: Slide[] = [
+  {
+    id: 1,
+    theme: 'dark',
+    navTheme: 'dark',
+    desktopWebp: '/images/hero/slide-1.webp',
+    desktopAvif: '/images/hero/slide-1.avif',
+    mobileWebp: '/images/hero/slide-1-mobile.webp',
+    mobileAvif: '/images/hero/slide-1-mobile.avif',
+    monoSub: '01 / 08 · FALL-WINTER 2026',
+    ctaText: 'EXPLORE COLLECTION',
+    ctaHref: '#collection',
+  },
+  {
+    id: 2,
+    theme: 'light',
+    navTheme: 'light',
+    desktopWebp: '/images/hero/slide-2.webp',
+    desktopAvif: '/images/hero/slide-2.avif',
+    mobileWebp: '/images/hero/slide-2-mobile.webp',
+    mobileAvif: '/images/hero/slide-2-mobile.avif',
+    tag: 'NEW IN',
+    monoSub: '01 / 08 · POPLIN & TWILL',
+    ctaText: 'DISCOVER WHITE',
+    ctaHref: '#collection',
+  },
+  // {
+  //   id: 3,
+  //   theme: 'dark',
+  //   navTheme: 'dark',
+  //   desktopWebp: '/images/hero/slide-3.webp',
+  //   desktopAvif: '/images/hero/slide-3.avif',
+  //   mobileWebp: '/images/hero/slide-3-mobile.webp',
+  //   mobileAvif: '/images/hero/slide-3-mobile.avif',
+  //   monoSub: '03 / RELAXED LINEN',
+  //   ctaText: 'VIEW CAMPAIGN',
+  //   ctaHref: '#showcase',
+  // },
+  // {
+  //   id: 4,
+  //   theme: 'light',
+  //   navTheme: 'light',
+  //   desktopWebp: '/images/hero/slide-4.webp',
+  //   desktopAvif: '/images/hero/slide-4.avif',
+  //   mobileWebp: '/images/hero/slide-4-mobile.webp',
+  //   mobileAvif: '/images/hero/slide-4-mobile.avif',
+  //   monoSub: '04 / PERMANENT LINE',
+  //   ctaText: 'SHOP SIGNATURES',
+  //   ctaHref: '#collection',
+  // },
+  // {
+  //   id: 5,
+  //   theme: 'dark',
+  //   navTheme: 'dark',
+  //   desktopWebp: '/images/hero/slide-5.webp',
+  //   desktopAvif: '/images/hero/slide-5.avif',
+  //   mobileWebp: '/images/hero/slide-5-mobile.webp',
+  //   mobileAvif: '/images/hero/slide-5-mobile.avif',
+  //   monoSub: '05 / EVENING WEAR',
+  //   ctaText: 'SHOP EVENING',
+  //   ctaHref: '#collection',
+  // },
+  // {
+  //   id: 6,
+  //   theme: 'dark',
+  //   navTheme: 'dark',
+  //   desktopWebp: '/images/hero/slide-6.webp',
+  //   desktopAvif: '/images/hero/slide-6.avif',
+  //   mobileWebp: '/images/hero/slide-6-mobile.webp',
+  //   mobileAvif: '/images/hero/slide-6-mobile.avif',
+  //   tag: 'MEMBERS ENJOY 15% OFF AT CHECKOUT',
+  //   monoSub: '06 / ARCHIVE RE-ISSUE',
+  //   ctaText: 'CLAIM ACCESS',
+  //   ctaHref: '#newsletter',
+  // },
+];
+---
+
+<section
+  id="hero-slider"
+  class="hero-slider"
+  aria-label="Merazo Editorial Carousel"
+  aria-roledescription="carousel"
+>
+  <!-- Edge Chevrons -->
+  <button
+    id="hero-prev"
+    class="hero-nav-arrow hero-nav-arrow--prev"
+    aria-label="Previous slide"
+  >
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <button
+    id="hero-next"
+    class="hero-nav-arrow hero-nav-arrow--next"
+    aria-label="Next slide"
+  >
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- Slide Track Container -->
+  <div class="hero__track">
+    {slides.map((s, idx) => (
+      <article
+        class={`hero__slide hero__slide--${s.id} theme-${s.theme}`}
+        data-nav={s.navTheme}
+        data-slide-index={idx}
+        aria-roledescription="slide"
+        aria-label={`${s.monoSub}`}
+      >
+        <!-- Full Bleed Image with Parallax Inner Container -->
+        <div class="hero__img-wrap" aria-hidden="true">
+          <picture class="hero__picture">
+            <!-- Mobile 9:16 -->
+            <source
+              media="(max-width: 768px)"
+              srcset={s.mobileAvif}
+              type="image/avif"
+            />
+            <source
+              media="(max-width: 768px)"
+              srcset={s.mobileWebp}
+              type="image/webp"
+            />
+            <!-- Desktop 16:9 -->
+            <source
+              srcset={s.desktopAvif}
+              type="image/avif"
+            />
+            <source
+              srcset={s.desktopWebp}
+              type="image/webp"
+            />
+            <img
+              src={s.desktopWebp}
+              alt="Merazo luxury shirt campaign editorial"
+              class="hero__slide-img"
+              width="3200"
+              height="1800"
+              loading={idx === 0 ? "eager" : "lazy"}
+              fetchpriority={idx === 0 ? "high" : "low"}
+              decoding="async"
+            />
+          </picture>
+          <div class={`hero__scrim hero__scrim--${s.theme}`} aria-hidden="true"></div>
+        </div>
+
+        <!-- Slide Editorial Content Container -->
+        <div class="hero__content-stage">
+          <div class="container hero__container">
+
+            {/* SLIDE 1: WEAR IT / OPEN. (Bottom-third, left-aligned, drawn red underline) */}
+            {s.id === 1 && (
+              <div class="slide-layout slide-layout--1">
+                <p class="hero-mono hero__meta-reveal">{s.monoSub}</p>
+                <h1 class="hero-title hero-title--1 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">WEAR IT</span>
+                  </span>
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner hero-title--relative">
+                      OPEN.
+                      <span class="hero__drawn-underline" aria-hidden="true"></span>
+                    </span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 2: WHITE shirt (Bottom-left aligned, pulsing red dot + NEW IN, red accent) */}
+            {s.id === 2 && (
+              <div class="slide-layout slide-layout--2">
+                <div class="slide-2-tag hero__meta-reveal" style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.6rem;">
+                  <span style="display:inline-flex;align-items:center;gap:0.4rem;">
+                    <span class="pulse-dot" aria-hidden="true"></span>
+                    <span class="hero-mono" style="margin-bottom:0;">{s.tag}</span>
+                  </span>
+                  <span class="hero-mono" style="margin-bottom:0;opacity:0.65;">·</span>
+                  <p class="hero-mono" style="margin-bottom:0;">{s.monoSub}</p>
+                </div>
+                <h1 class="hero-title hero-title--2 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">
+                      WHITE <span class="text-accent">SHIRT</span>
+                    </span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 3: RESORT ’26 (Ultra-spaced serif caps, bottom-left, superscript ’26) */}
+            {s.id === 3 && (
+              <div class="slide-layout slide-layout--3">
+                <p class="hero-mono hero__meta-reveal">{s.monoSub}</p>
+                <h1 class="hero-title hero-title--3 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">
+                      RESORT<sup class="text-accent">’26</sup>
+                    </span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 4: SIGNATURE / SHIRTS (Giant, stacked right-aligned, tiny list) */}
+            {s.id === 4 && (
+              <div class="slide-layout slide-layout--4">
+                <div class="slide-4-header hero__meta-reveal">
+                  <p class="hero-mono">{s.monoSub}</p>
+                  <p class="hero-mono text-muted">01 OXFORD · 02 POPLIN · 03 LINEN</p>
+                </div>
+                <h1 class="hero-title hero-title--4 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">SIGNATURE</span>
+                  </span>
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">SHIRTS</span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 5: THE SATIN / HOUR. (Massive, center-aligned, accent period) */}
+            {s.id === 5 && (
+              <div class="slide-layout slide-layout--5">
+                <p class="hero-mono hero__meta-reveal">{s.monoSub}</p>
+                <h1 class="hero-title hero-title--5 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">THE SATIN</span>
+                  </span>
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">
+                      HOUR<span class="text-accent">.</span>
+                    </span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 6: LINEN SEASON (Bottom-left, member pill outline) */}
+            {s.id === 6 && (
+              <div class="slide-layout slide-layout--6">
+                <div class="slide-6-pill hero__meta-reveal">
+                  <span class="hero-mono">{s.tag}</span>
+                </div>
+                <p class="hero-mono hero__meta-reveal">{s.monoSub}</p>
+                <h1 class="hero-title hero-title--6 display-grotesk">
+                  <span class="hero__mask">
+                    <span class="hero__mask-inner">LINEN SEASON</span>
+                  </span>
+                </h1>
+                <div class="hero__cta-wrap hero__meta-reveal">
+                  <a href={s.ctaHref} class="hero-cta-btn">
+                    <span>{s.ctaText}</span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <!-- Bottom-Left Segmented Progress Bar + Play/Pause Button -->
+  <div class="hero__controls-bottom-left" aria-label="Slideshow progress and playback controls">
+    <button
+      id="hero-play-pause"
+      class="hero-play-btn"
+      aria-label="Pause hero slideshow"
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
+        <path d="M4 3h2v8H4V3zm4 0h2v8H8V3z"/>
+      </svg>
+    </button>
+
+    <div class="hero-segments" role="tablist" aria-label="Slide indicators">
+      {slides.map((_, i) => (
+        <button
+          class="hero-seg"
+          role="tab"
+          aria-label={`Go to slide ${i + 1}`}
+          data-seg-index={i}
+        >
+          <span class="hero-seg__track">
+            <span class="hero-seg__fill"></span>
+          </span>
+        </button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-slider {
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+    background-color: var(--ink, #0A0A0A);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .hero__track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hero__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Full-bleed Image Container (Authentic Aspect Ratio, No Top Overlap) */
+  .hero__img-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero__picture,
+  .hero__slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+
+  /* No overlays on hero imagery - pure photography */
+  .hero__scrim {
+    display: none !important;
+  }
+
+  /* Editorial Stage */
+  .hero__content-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: clamp(3.5rem, 7vh, 5.5rem);
+    pointer-events: none;
+  }
+
+  .hero__container {
+    width: 100%;
+    pointer-events: auto;
+  }
+
+  /* Theme Text Colors */
+  .hero__slide.theme-dark {
+    color: var(--white, #FFFFFF);
+  }
+
+  .hero__slide.theme-light {
+    color: var(--ink, #0A0A0A);
+  }
+
+  .hero__slide.theme-light .hero-mono {
+    color: rgba(10, 10, 10, 0.75);
+  }
+
+  .hero__slide.theme-dark .hero-mono {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  /* Masks for Split Text Animation */
+  .hero__mask {
+    display: block;
+    overflow: hidden;
+    line-height: 0.95;
+    padding-bottom: 0.08em;
+  }
+
+  .hero__mask-inner {
+    display: block;
+    will-change: transform, opacity;
+  }
+
+  .hero-mono {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.45rem;
+    opacity: 0.85;
+  }
+
+  .hero-title {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    font-kerning: normal;
+    margin: 0;
+  }
+
+  .hero-title--relative {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Slide 1 Underline */
+  .hero__drawn-underline {
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent, #E10600);
+    transform-origin: left;
+    display: block;
+  }
+
+  /* CTA Button */
+  .hero__cta-wrap {
+    margin-top: 1.75rem;
+  }
+
+  .hero-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.75rem;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-dark .hero-cta-btn {
+    background-color: var(--white, #FFFFFF);
+    color: var(--ink, #0A0A0A);
+    border: 1px solid var(--white, #FFFFFF);
+  }
+
+  .theme-dark .hero-cta-btn:hover {
+    background-color: var(--accent, #E10600);
+    border-color: var(--accent, #E10600);
+    color: var(--white, #FFFFFF);
+  }
+
+  .theme-light .hero-cta-btn {
+    background-color: var(--ink, #0A0A0A);
+    color: var(--white, #FFFFFF);
+    border: 1px solid var(--ink, #0A0A0A);
+  }
+
+  .theme-light .hero-cta-btn:hover {
+    background-color: var(--accent, #E10600);
+    border-color: var(--accent, #E10600);
+    color: var(--white, #FFFFFF);
+  }
+
+  /* Slide Specific Layouts (Refined Editorial Scale) */
+  /* Slide 1 - Heavy tight neo-grotesque headline */
+  .slide-layout--1 .hero-title--1,
+  h1.hero-title {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-size: clamp(2.5rem, 5.5vw, 5rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;   /* letters almost touching */
+    line-height: 0.85;
+    font-kerning: normal;
+  }
+
+  /* Slide 2 */
+  .slide-layout--2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .slide-2-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--accent, #E10600);
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.8); }
+  }
+
+  .slide-layout--2 .hero-title--2 {
+    font-size: clamp(2rem, 4.5vw, 4rem);
+    font-weight: 900;
+    margin-bottom: 1rem;
+  }
+
+  /* Slide 3 */
+  .slide-layout--3 .hero-title--3 {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif) !important;
+    font-size: clamp(2.5rem, 5.5vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    font-kerning: normal;
+    text-transform: uppercase;
+  }
+
+  .slide-layout--3 sup {
+    font-size: 0.45em;
+    top: -0.8em;
+    letter-spacing: 0.05em;
+  }
+
+  /* Slide 4 */
+  .slide-layout--4 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .slide-4-header {
+    margin-bottom: 0.5rem;
+  }
+
+  .slide-layout--4 .hero-title--4 {
+    font-size: clamp(2.2rem, 5.2vw, 4.5rem);
+    font-weight: 900;
+  }
+
+  /* Slide 5 */
+  .slide-layout--5 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .slide-layout--5 .hero-title--5 {
+    font-size: clamp(2.2rem, 5vw, 4.25rem);
+    font-weight: 900;
+  }
+
+  /* Slide 6 */
+  .slide-6-pill {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--accent, #E10600);
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+
+  .slide-6-pill .hero-mono {
+    margin-bottom: 0;
+    color: var(--accent, #E10600) !important;
+    font-size: 0.7rem;
+  }
+
+  .slide-layout--6 .hero-title--6 {
+    font-size: clamp(2rem, 4.8vw, 4rem);
+    font-weight: 900;
+  }
+
+  /* Chevrons */
+  .hero-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 60;
+    background: rgba(10, 10, 10, 0.25);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--white, #FFFFFF);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .hero-nav-arrow:hover {
+    background: rgba(10, 10, 10, 0.6);
+    border-color: var(--accent, #E10600);
+    color: var(--accent, #E10600);
+  }
+
+  .hero-nav-arrow--prev {
+    left: clamp(1rem, 2.5vw, 2.5rem);
+  }
+
+  .hero-nav-arrow--next {
+    right: clamp(1rem, 2.5vw, 2.5rem);
+  }
+
+  /* Controls Bottom-Left */
+  .hero__controls-bottom-left {
+    position: absolute;
+    bottom: clamp(1.5rem, 3vh, 2.5rem);
+    left: clamp(1.5rem, 4vw, 4rem);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero-play-btn {
+    background: none;
+    border: none;
+    color: var(--white, #FFFFFF);
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+  }
+
+  .hero-play-btn:hover {
+    color: var(--accent, #E10600);
+  }
+
+  .hero-segments {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .hero-seg {
+    background: none;
+    border: none;
+    padding: 0.5rem 0;
+    cursor: pointer;
+  }
+
+  .hero-seg__track {
+    display: block;
+    width: clamp(24px, 3.5vw, 42px);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.28);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-seg__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--accent, #E10600);
+    transform: scaleX(0);
+    transform-origin: left;
+    will-change: transform;
+  }
+
+  /* Glass STORE Tile Bottom-Right */
+  .hero-glass-store {
+    position: absolute;
+    bottom: clamp(1.5rem, 3vh, 2.5rem);
+    right: clamp(1.5rem, 4vw, 4rem);
+    z-index: 60;
+    padding: 0.75rem 1.25rem;
+    background: rgba(10, 10, 10, 0.45);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: var(--white, #FFFFFF);
+    transition: all 0.3s ease;
+  }
+
+  .hero-glass-store:hover {
+    border-color: var(--accent, #E10600);
+    background: rgba(10, 10, 10, 0.65);
+  }
+
+  .glass-store__header {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .store-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #22C55E; /* Status green */
+    display: block;
+  }
+
+  .store-status {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 0;
+  }
+
+  .glass-store__time {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--white, #FFFFFF);
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 768px) {
+    .hero-nav-arrow {
+      display: none;
+    }
+    .hero-glass-store {
+      display: none;
+    }
+    .hero__content-stage {
+      padding-bottom: 6rem;
+    }
+    .slide-layout--2 .hero-title--2 {
+      font-size: clamp(2.4rem, 11vw, 4rem);
+    }
+  }
+</style>

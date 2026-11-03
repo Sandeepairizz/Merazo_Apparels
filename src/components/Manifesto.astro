@@ -1,0 +1,54 @@
+---
+// Manifesto.astro — Part E-02
+// Fluid type clamp(1.75rem, 4vw, 4rem), words scrub 0.15 → 1 opacity, 3 words highlighted in accent.
+---
+
+<section class="manifesto section section--off" id="manifesto" aria-label="Brand manifesto">
+  <div class="container">
+
+    <!-- Mono Section Label with safe clearance -->
+    <div class="section-header">
+      <p class="text-mono">01 / MANIFESTO</p>
+    </div>
+
+    <!-- Manifesto Text with Word-Safe Scrub -->
+    <div class="manifesto__text" id="manifesto-text" aria-label="Merazo manifesto">
+      {[
+        { word: 'A',            accent: false },
+        { word: 'shirt',        accent: false },
+        { word: 'is',           accent: false },
+        { word: 'not',          accent: false },
+        { word: 'a',            accent: false },
+        { word: 'statement.',    accent: false },
+        { word: "It's",         accent: false },
+        { word: 'a',            accent: false },
+        { word: 'decision.',    accent: true },
+
+        { word: 'We',           accent: false },
+        { word: "don't",        accent: false },
+        { word: 'chase',        accent: false },
+        { word: 'seasons.',     accent: false },
+        { word: 'We',           accent: false },
+        { word: 'build',        accent: false },
+        { word: 'permanence:',  accent: true },
+
+        { word: 'long-staple',  accent: false },
+        { word: 'cotton,',      accent: false },
+        { word: 'French',       accent: false },
+        { word: 'seams,',       accent: false },
+        { word: 'mother-of-pearl.', accent: false },
+
+        { word: 'Details',      accent: false },
+        { word: 'that',         accent: false },
+        { word: 'outlast',      accent: true },
+        { word: 'the',          accent: false },
+        { word: 'hype.',        accent: false },
+      ].map((item) => (
+        <span class={`manifesto__word ${item.accent ? 'manifesto__word--accent' : ''}`}>
+          {item.word}&nbsp;
+        </span>
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -1,0 +1,366 @@
+---
+// src/components/TryOn.astro
+// TRY IT ON — Signature Interactive Section
+// Pure white stage, no scroll-driven pin, automatic V-track flow (right -> left)
+// Behind-model card depth sorting, model swap on arrival, dual-gender support.
+import MagneticButton from './islands/MagneticButton';
+import { SHIRTS } from '../scripts/tryon';
+
+// 12 cards total (6 shirts × 2 copies)
+const cardSlots = Array.from({ length: 12 }, (_, i) => {
+  const shirt = SHIRTS[(( -i % 6 ) + 6 ) % 6];
+  return { slotIndex: i, shirt };
+});
+---
+
+<section
+  class="tryon-section section"
+  id="shirt-changer"
+  aria-label="Try it on virtual showroom"
+>
+  <div class="tryon__stage">
+
+    <!-- Top Left Label -->
+    <div class="tryon__header-left">
+      <p class="text-mono" style="font-size:0.75rem;letter-spacing:0.08em;color:var(--ink);">
+        06 / 11 · TRY IT ON
+      </p>
+    </div>
+
+    <!-- Top Right Gender Toggle -->
+    <div class="tryon__gender-toggle" role="tablist" aria-label="Select model gender">
+      <button
+        class="tryon__tab active"
+        id="tryon-toggle-women"
+        role="tab"
+        aria-selected="true"
+        type="button"
+      >
+        WOMEN
+      </button>
+      <button
+        class="tryon__tab"
+        id="tryon-toggle-men"
+        role="tab"
+        aria-selected="false"
+        type="button"
+      >
+        MEN
+      </button>
+      <span class="tryon__tab-indicator" aria-hidden="true"></span>
+    </div>
+
+    <!-- Live Screen Reader Caption -->
+    <p id="tryon-live-caption" class="sr-only" aria-live="polite">
+      Now wearing: Oxford, Ivory
+    </p>
+
+    <!-- Cards Layer (Z-Index increases toward right, all below Model 500) -->
+    <div class="tryon__cards-track" aria-hidden="false">
+      {cardSlots.map((item, j) => (
+        <button
+          class="tryon-card"
+          data-card-index={j}
+          data-shirt-id={item.shirt.id}
+          type="button"
+          aria-label={`Select ${item.shirt.name} shirt, ${item.shirt.color}`}
+        >
+          <div class="tryon-card__thumb-wrap">
+            <img
+              src={`/images/tryon/women/shirt-${item.shirt.id}.webp`}
+              alt=""
+              class="tryon-card__img"
+              width="180"
+              height="180"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          <span class="tryon-card__label">{item.shirt.name}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Model Container (z-index: 500, above all cards) -->
+    <div class="tryon__model-container" aria-hidden="true">
+      <div class="tryon__model-stack">
+        <!-- Women Model Layers -->
+        {SHIRTS.map((s, i) => (
+          <img
+            src={`/images/tryon/women/model-${s.id}.webp`}
+            alt=""
+            class={`tryon__model-layer ${i === 0 ? 'active' : ''}`}
+            data-tryon-gender="women"
+            data-model-shirt={s.id}
+            width="1200"
+            height="1600"
+            loading="eager"
+            decoding="async"
+            style={i === 0 ? 'opacity: 1; visibility: visible; z-index: 502;' : 'opacity: 0; visibility: hidden; z-index: 500;'}
+          />
+        ))}
+
+        <!-- Men Model Layers -->
+        {SHIRTS.map((s) => (
+          <img
+            src={`/images/tryon/men/model-${s.id}.webp`}
+            alt=""
+            class="tryon__model-layer"
+            data-tryon-gender="men"
+            data-model-shirt={s.id}
+            width="1200"
+            height="1600"
+            loading="lazy"
+            decoding="async"
+            style="opacity: 0; visibility: hidden; z-index: 500;"
+          />
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom Left Active Shirt Info & Magnetic CTA -->
+    <div class="tryon__active-info">
+      <h1 id="tryon-active-name" class="tryon__title display-grotesk">
+        OXFORD
+      </h1>
+      <p id="tryon-active-meta" class="tryon__meta text-mono">
+        LONG-STAPLE COTTON · £185
+      </p>
+
+      <div style="margin-top: 1.25rem;">
+        <MagneticButton
+          variant="filled"
+          href="#collection"
+          ariaLabel="Add currently viewed shirt to bag"
+          client:visible
+        >
+          <span>ADD TO BAG</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2.5 8h11M9 3.5l4.5 4.5-4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </MagneticButton>
+      </div>
+    </div>
+
+    <!-- Bottom Edge 2px Progress Bar -->
+    <div class="tryon__progress-track" aria-hidden="true">
+      <div class="tryon__progress-bar"></div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .tryon-section {
+    position: relative;
+    width: 100%;
+    height: 100svh;
+    min-height: 680px;
+    max-height: 980px;
+    background: #FFFFFF;
+    overflow: hidden;
+    padding: 0 !important;
+  }
+
+  .tryon__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* Top Left Header */
+  .tryon__header-left {
+    position: absolute;
+    top: calc(var(--nav-height) + 1.25rem);
+    left: var(--grid-gutter);
+    z-index: 600;
+  }
+
+  /* Top Right Gender Toggle */
+  .tryon__gender-toggle {
+    position: absolute;
+    top: calc(var(--nav-height) + 1rem);
+    right: var(--grid-gutter);
+    z-index: 600;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .tryon__tab {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    transition: color 0.25s ease;
+  }
+
+  .tryon__tab.active {
+    color: var(--ink);
+  }
+
+  .tryon__tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: var(--accent);
+  }
+
+  /* Model Container */
+  .tryon__model-container {
+    position: absolute;
+    bottom: 0;
+    left: 52%;
+    transform: translateX(-50%);
+    width: clamp(280px, 18vw, 360px);
+    height: 118%;
+    z-index: 500;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .tryon__model-container {
+      width: clamp(220px, 55vw, 320px);
+      left: 50%;
+    }
+  }
+
+  .tryon__model-stack {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .tryon__model-layer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transform-origin: bottom center;
+  }
+
+  /* Cards Track */
+  .tryon__cards-track {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* Product Card */
+  .tryon-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: clamp(96px, 11vw, 170px);
+    aspect-ratio: 0.91;
+    background: #FFFFFF;
+    border: 1px solid #E6E6E6;
+    border-radius: 0;
+    padding: clamp(0.5rem, 1vw, 0.875rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: none;
+    cursor: pointer;
+    pointer-events: auto;
+    will-change: transform, opacity;
+    transition: border-color 0.25s ease;
+  }
+
+  @media (max-width: 768px) {
+    .tryon-card {
+      width: clamp(84px, 28vw, 120px);
+    }
+  }
+
+  .tryon-card.active {
+    border-color: var(--accent) !important;
+  }
+
+  .tryon-card__thumb-wrap {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .tryon-card__img {
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+  }
+
+  .tryon-card__label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.25s ease;
+  }
+
+  .tryon-card.active .tryon-card__label {
+    color: var(--ink) !important;
+  }
+
+  /* Bottom Left Active Info */
+  .tryon__active-info {
+    position: absolute;
+    bottom: clamp(2rem, 5vh, 4rem);
+    left: var(--grid-gutter);
+    z-index: 600;
+  }
+
+  .tryon__title {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    font-kerning: normal;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+
+  .tryon__meta {
+    font-size: clamp(0.75rem, 1.2vw, 0.875rem);
+    color: var(--muted);
+  }
+
+  /* Bottom Edge Progress Line */
+  .tryon__progress-track {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(10, 10, 10, 0.08);
+    z-index: 650;
+  }
+
+  .tryon__progress-bar {
+    width: 100%;
+    height: 100%;
+    background: var(--accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+</style>
+

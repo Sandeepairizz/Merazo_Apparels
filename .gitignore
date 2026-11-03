@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production build output
+dist/
+.astro/
+
+# Environment variables
+.env
+.env.production
+.env.local
+.env.*.local
+!.env.example
+
+# Temporary test profiles & reports
+.chrome-temp/
+.chrome-tmp/
+reports/
+test-results/
+*.tmp
+
+# Raw font binaries (self-hosted WOFF2 is in public/fonts/)
+Anybody-var.ttf
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.bak
+*.swp
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

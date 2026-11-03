@@ -1,0 +1,36 @@
+---
+// Marquee.astro — Part A-2 & Part E-01
+// Single line, white-space:nowrap; display:flex; flex-wrap:nowrap;
+// Duplicate content for a seamless loop; speed reacts to scroll velocity and reverses on scroll up.
+---
+
+<section class="marquee-section" id="fabrics" role="region" aria-label="Shirt fabric types marquee">
+  <div class="container" style="padding-bottom: 0.5rem;">
+    <p class="text-mono" style="font-size:0.6875rem;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;">
+      02 / 11 · PROVENANCE & TEXTILES
+    </p>
+  </div>
+  <div class="marquee-container">
+    <div class="marquee-track">
+      {[
+        { text: 'POPLIN',   solid: true },
+        { text: 'OXFORD',   solid: false },
+        { text: 'LINEN',    solid: true },
+        { text: 'TWILL',    solid: false },
+        { text: 'SATIN',    solid: true },
+        { text: 'POPLIN',   solid: false },
+        { text: 'OXFORD',   solid: true },
+        { text: 'LINEN',    solid: false },
+        { text: 'TWILL',    solid: true },
+        { text: 'SATIN',    solid: false },
+      ].map((item) => (
+        <span style="display:inline-flex;align-items:center;flex-shrink:0;">
+          <span class={`marquee-item ${item.solid ? '' : 'marquee-item--outline'}`}>
+            {item.text}
+          </span>
+          <span class="marquee-sep" aria-hidden="true">—</span>
+        </span>
+      ))}
+    </div>
+  </div>
+</section>

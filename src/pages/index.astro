@@ -1,0 +1,83 @@
+---
+// src/pages/index.astro
+// Merazo — Editorial luxury single-page website
+import Layout from '../layouts/Layout.astro';
+import Preloader from '../components/Preloader.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import TrendingSection from '../components/TrendingSection.astro';
+import HorizontalShowcase from '../components/HorizontalShowcase.astro';
+import ShopByCategory from '../components/ShopByCategory.astro';
+import FeaturedCollection from '../components/FeaturedCollection.astro';
+import ExpandingCategories from '../components/ExpandingCategories.astro';
+import CraftSection from '../components/CraftSection.astro';
+import NewsletterFooter from '../components/NewsletterFooter.astro';
+---
+
+<Layout
+  title="Merazo — Cut with intent. Worn for years."
+  description="Merazo is an independent luxury house of shirts for men and women. Oxford, linen, poplin, overshirts — crafted with intent, designed for permanence."
+>
+
+  <!-- 0. Preloader (Counter 000-100, shuffle cards, wordmark wipe) -->
+  <Preloader />
+
+  <!-- 1. Fixed Difference Navigation -->
+  <Nav />
+
+  <!-- Accessible Skip Link -->
+  <a
+    href="#main-content"
+    class="sr-only"
+    style="
+      position:fixed;top:1rem;left:1rem;z-index:99999;
+      background:var(--accent);color:var(--white);
+      padding:0.75rem 1.25rem;font-family:var(--font-mono);font-size:0.75rem;
+      letter-spacing:0.08em;text-transform:uppercase;border-radius:2px;
+    "
+  >
+    Skip to main content
+  </a>
+
+  <main id="main-content" role="main">
+
+    <!-- 01 / 08. Hero Campaign Carousel -->
+    <Hero />
+
+    <!-- 02 / 08. Trending Curated Pieces (Best Sellers) -->
+    <TrendingSection />
+
+    <!-- 03 / 08. Horizontal Showcase (5 Campaign Panels) -->
+    <HorizontalShowcase />
+
+    <!-- 04 / 08. Shop By Category (Editorial Model Cards) -->
+    <ShopByCategory />
+
+    <!-- 05 / 08. Featured Collection (Men / Women Tabbed Grid) -->
+    <FeaturedCollection />
+
+    <!-- 06 / 08. Proportions (Silhouette Fit Guide) -->
+    <ExpandingCategories />
+
+    <!-- 07 / 08. Craft (Performance by Design Atelier Specs) -->
+    <CraftSection />
+
+    <!-- 08 / 08. Dispatches & Clean Luxury Footer -->
+    <NewsletterFooter />
+
+  </main>
+
+  <!-- Structured Data: JSON-LD Product & Brand Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Brand",
+      "name": "Merazo",
+      "url": "https://merazo.com",
+      "logo": "https://merazo.com/favicon.svg",
+      "slogan": "Cut with intent. Worn for years.",
+      "description": "Independent luxury house of shirts for men and women."
+    }
+  </script>
+
+</Layout>

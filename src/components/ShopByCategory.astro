@@ -1,0 +1,365 @@
+---
+// src/components/ShopByCategory.astro
+// Clean, high-converting "SHOP BY CATEGORY" section featuring real model editorial photography
+// Reference layout with signature Signal Red underline under CATEGORY.
+
+interface CategoryItem {
+  id: string;
+  name: string;
+  sub: string;
+  image: string;
+  href: string;
+}
+
+const categories: CategoryItem[] = [
+  {
+    id: 'shirts',
+    name: 'SHIRTS',
+    sub: '14 STYLES',
+    image: '/images/products/men-01.webp',
+    href: '#trending',
+  },
+  {
+    id: 'tshirts',
+    name: 'T-SHIRTS',
+    sub: '08 STYLES',
+    image: '/images/mosaic/03.webp',
+    href: '#trending',
+  },
+  {
+    id: 'jackets',
+    name: 'JACKETS',
+    sub: '06 STYLES',
+    image: '/images/products/men-04.webp',
+    href: '#trending',
+  },
+  {
+    id: 'jeans',
+    name: 'JEANS',
+    sub: '07 STYLES',
+    image: '/images/categories/relaxed.webp',
+    href: '#trending',
+  },
+  {
+    id: 'sweaters',
+    name: 'SWEATERS',
+    sub: '09 STYLES',
+    image: '/images/mosaic/04.webp',
+    href: '#trending',
+  },
+  {
+    id: 'polos',
+    name: 'POLOS',
+    sub: '05 STYLES',
+    image: '/images/mosaic/06.webp',
+    href: '#trending',
+  },
+  {
+    id: 'trousers',
+    name: 'TROUSERS',
+    sub: '08 STYLES',
+    image: '/images/products/men-03.webp',
+    href: '#trending',
+  },
+];
+---
+
+<section class="shop-category section" id="shop-by-category" aria-label="Shop apparel by category">
+  <div class="container">
+
+    <!-- Header matching reference: SHOP BY / CATEGORY with red underline -->
+    <div class="shop-category__header">
+      <div class="shop-category__header-top">
+        <p class="text-mono" style="font-size:0.75rem;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.75rem;">
+          04 / 08 · SHOP BY CATEGORY
+        </p>
+        <h1 class="shop-category__title display-grotesk">
+          SHOP BY<br />
+          <span class="shop-category__title-underline">CATEGORY</span>
+        </h1>
+      </div>
+      <div class="shop-category__header-nav">
+        <button id="cat-scroll-prev" class="cat-nav-btn" aria-label="Scroll categories left" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button id="cat-scroll-next" class="cat-nav-btn" aria-label="Scroll categories right" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Horizontal Category Strip matching reference -->
+    <div class="shop-category__track-wrap" id="shop-cat-track-wrap" role="region" aria-label="Product categories carousel">
+      <div class="shop-category__track" id="shop-cat-track">
+        {categories.map((cat) => (
+          <a href={cat.href} class="shop-category__card" aria-label={`Shop ${cat.name} — ${cat.sub}`}>
+            <div class="shop-category__meta">
+              <h2 class="shop-category__card-title">{cat.name}</h2>
+            </div>
+            <div class="shop-category__img-frame">
+              <img
+                src={cat.image}
+                alt={`Merazo model wearing ${cat.name}`}
+                class="shop-category__img"
+                width="400"
+                height="533"
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="shop-category__badge text-mono">{cat.sub}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom link matching reference: SHOP ALL -->
+    <div class="shop-category__footer">
+      <a href="#trending" class="shop-category__shop-all text-mono">
+        <span>SHOP ALL</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function initCategoryControls() {
+    const wrap = document.getElementById('shop-cat-track-wrap');
+    const prevBtn = document.getElementById('cat-scroll-prev');
+    const nextBtn = document.getElementById('cat-scroll-next');
+
+    if (!wrap || !prevBtn || !nextBtn) return;
+
+    prevBtn.addEventListener('click', () => {
+      wrap.scrollBy({ left: -320, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      wrap.scrollBy({ left: 320, behavior: 'smooth' });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCategoryControls);
+  } else {
+    initCategoryControls();
+  }
+  document.addEventListener('astro:page-load', initCategoryControls);
+</script>
+
+<style>
+  .shop-category {
+    background-color: var(--white, #FFFFFF);
+    padding-top: clamp(4.5rem, 8vw, 7.5rem);
+    padding-bottom: clamp(4.5rem, 8vw, 7.5rem);
+    border-bottom: 1px solid rgba(10, 10, 10, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shop-category__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+    gap: 1.5rem;
+  }
+
+  .shop-category__title {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.85;
+    font-kerning: normal;
+    text-transform: uppercase;
+    color: var(--ink, #0A0A0A);
+    margin: 0;
+  }
+
+  .shop-category__title-underline {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+  }
+
+  .shop-category__title-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent, #E10600);
+  }
+
+  .shop-category__header-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cat-nav-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(10, 10, 10, 0.15);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink, #0A0A0A);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .cat-nav-btn:hover {
+    background: var(--ink, #0A0A0A);
+    color: var(--white, #FFFFFF);
+    border-color: var(--ink, #0A0A0A);
+  }
+
+  /* Horizontal Scrollable Track */
+  .shop-category__track-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 1.25rem;
+    margin-inline: -0.5rem;
+    scroll-behavior: smooth;
+  }
+
+  .shop-category__track-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-category__track {
+    display: flex;
+    gap: clamp(1rem, 2vw, 1.75rem);
+    padding-inline: 0.5rem;
+    min-width: min-content;
+  }
+
+  .shop-category__card {
+    display: flex;
+    flex-direction: column;
+    width: clamp(190px, 20vw, 240px);
+    flex-shrink: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .shop-category__img-frame {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #F4F3F0;
+    position: relative;
+  }
+
+  .shop-category__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .shop-category__card:hover .shop-category__img {
+    transform: scale(1.06);
+  }
+
+  .shop-category__badge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    background: rgba(10, 10, 10, 0.65);
+    backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  .shop-category__meta {
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .shop-category__card-title {
+    font-family: var(--font-grotesk, "Inter Tight", "Helvetica Neue", Arial, sans-serif);
+    font-size: 0.9375rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink, #0A0A0A);
+    margin: 0;
+    transition: color 0.25s ease;
+  }
+
+  .shop-category__card:hover .shop-category__card-title {
+    color: var(--accent, #E10600);
+  }
+
+  .shop-category__explore {
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    color: var(--muted, #6B6B6B);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.25s ease;
+  }
+
+  .shop-category__card:hover .shop-category__explore {
+    color: var(--accent, #E10600);
+    gap: 0.5rem;
+  }
+
+  /* Bottom Shop All Link */
+  .shop-category__footer {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    align-items: center;
+  }
+
+  .shop-category__shop-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    color: var(--ink, #0A0A0A);
+    text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 1.5px solid var(--ink, #0A0A0A);
+    transition: all 0.25s ease;
+  }
+
+  .shop-category__shop-all:hover {
+    color: var(--accent, #E10600);
+    border-color: var(--accent, #E10600);
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .shop-category__card {
+      width: clamp(160px, 45vw, 190px);
+    }
+  }
+</style>

@@ -1,0 +1,210 @@
+---
+// FeaturedCollection.astro — Part E-03
+// H2 "PIECES CHOSEN, NOT PRODUCED."
+// Men / Women tab toggle with sliding underline.
+// 4 product cards per tab: 4:5 ratio, hover alt crossfade + scale 1.04 + Quick Add slide-up + name underline.
+import ProductCardIsland from './islands/ProductCardIsland';
+
+const menProducts = [
+  {
+    id: 'm1',
+    name: 'Oxford Ivory',
+    price: '£195',
+    category: 'Oxford Weave',
+    imagePrimary: '/images/products/men-01.webp',
+    imageSecondary: '/images/products/men-01-alt.webp',
+    colors: ['#FAF9F5', '#E4E1DB', '#2A2520'],
+    href: '#collection',
+  },
+  {
+    id: 'm2',
+    name: 'Linen Sand',
+    price: '£225',
+    category: 'Pure Flax Linen',
+    imagePrimary: '/images/products/men-02.webp',
+    imageSecondary: '/images/products/men-02-alt.webp',
+    colors: ['#D8CBB8', '#C4A882', '#4A4A3F'],
+    href: '#collection',
+  },
+  {
+    id: 'm3',
+    name: 'Poplin Black',
+    price: '£185',
+    category: 'High-Density Poplin',
+    imagePrimary: '/images/products/men-03.webp',
+    imageSecondary: '/images/products/men-03-alt.webp',
+    colors: ['#141414', '#2C2C2C', '#FFFFFF'],
+    href: '#collection',
+  },
+  {
+    id: 'm4',
+    name: 'Overshirt Olive',
+    price: '£245',
+    category: 'Structured Twill',
+    imagePrimary: '/images/products/men-04.webp',
+    imageSecondary: '/images/products/men-04-alt.webp',
+    colors: ['#637060', '#3D463B', '#1E221D'],
+    href: '#collection',
+  },
+];
+
+const womenProducts = [
+  {
+    id: 'w1',
+    name: 'Satin Black',
+    price: '£210',
+    category: 'Silk-Cotton Satin',
+    imagePrimary: '/images/products/women-01.webp',
+    imageSecondary: '/images/products/women-01-alt.webp',
+    colors: ['#141414', '#241F1A', '#EDECE8'],
+    href: '#collection',
+  },
+  {
+    id: 'w2',
+    name: 'Linen White',
+    price: '£195',
+    category: 'Washed Pure Linen',
+    imagePrimary: '/images/products/women-02.webp',
+    imageSecondary: '/images/products/women-02-alt.webp',
+    colors: ['#FFFFFF', '#F0EBE1', '#C5A882'],
+    href: '#collection',
+  },
+  {
+    id: 'w3',
+    name: 'Tailored Sky',
+    price: '£185',
+    category: 'Compact Poplin',
+    imagePrimary: '/images/products/women-03.webp',
+    imageSecondary: '/images/products/women-03-alt.webp',
+    colors: ['#8BA5BF', '#BFD0E0', '#FFFFFF'],
+    href: '#collection',
+  },
+  {
+    id: 'w4',
+    name: 'Relaxed Stone',
+    price: '£225',
+    category: 'Boxy Cotton-Linen',
+    imagePrimary: '/images/products/women-04.webp',
+    imageSecondary: '/images/products/women-04-alt.webp',
+    colors: ['#D6CEC5', '#B8AEA2', '#3B3630'],
+    href: '#collection',
+  },
+];
+---
+
+<section class="collection section" id="collection" aria-label="Featured collection">
+  <div class="container">
+
+    <!-- Section header with safe nav clearance -->
+    <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;">
+      <p class="text-mono">05 / 08 · COLLECTION</p>
+      <span class="text-mono" style="color:var(--accent);">EDITION 01</span>
+    </div>
+
+    <!-- Heading per Part E-03 -->
+    <div data-reveal-heading>
+      <h1 class="display-grotesk text-h1" style="margin-bottom:2.5rem;">
+        <span class="mask" style="display:block;"><span class="mask-inner">PIECES CHOSEN,</span></span>
+        <span class="mask" style="display:block;"><span class="mask-inner text-accent">NOT PRODUCED.</span></span>
+      </h1>
+    </div>
+
+    <!-- Men / Women tabs with sliding indicator -->
+    <div class="collection__tabs" role="tablist" aria-label="Filter products by gender">
+      <button
+        class="collection__tab active"
+        id="tab-men"
+        role="tab"
+        aria-selected="true"
+        aria-controls="panel-men"
+        type="button"
+      >
+        Men's Fits
+      </button>
+      <button
+        class="collection__tab"
+        id="tab-women"
+        role="tab"
+        aria-selected="false"
+        aria-controls="panel-women"
+        type="button"
+      >
+        Women's Fits
+      </button>
+    </div>
+
+    <!-- Men's Grid (Visible by default) -->
+    <div id="panel-men" role="tabpanel" aria-labelledby="tab-men">
+      <div class="collection__grid">
+        {menProducts.map((product) => (
+          <ProductCardIsland product={product} client:visible />
+        ))}
+      </div>
+    </div>
+
+    <!-- Women's Grid -->
+    <div id="panel-women" role="tabpanel" aria-labelledby="tab-women" aria-hidden="true" style="display:none;">
+      <div class="collection__grid">
+        {womenProducts.map((product) => (
+          <ProductCardIsland product={product} client:visible />
+        ))}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+
+  const tabMen    = document.getElementById('tab-men');
+  const tabWomen  = document.getElementById('tab-women');
+  const panelMen  = document.getElementById('panel-men');
+  const panelWomen= document.getElementById('panel-women');
+
+  function switchTab(show: 'men' | 'women') {
+    const active   = show === 'men' ? panelMen   : panelWomen;
+    const inactive = show === 'men' ? panelWomen : panelMen;
+    const activeTab   = show === 'men' ? tabMen   : tabWomen;
+    const inactiveTab = show === 'men' ? tabWomen : tabMen;
+
+    if (!active || !inactive || !activeTab || !inactiveTab) return;
+
+    const outCards = inactive.querySelectorAll<HTMLElement>('.product-card');
+    gsap.to(outCards, {
+      y: 20,
+      opacity: 0,
+      duration: 0.3,
+      stagger: 0.03,
+      ease: 'power2.in',
+      onComplete: () => {
+        inactive.style.display = 'none';
+        inactive.setAttribute('aria-hidden', 'true');
+
+        active.style.display = 'block';
+        active.setAttribute('aria-hidden', 'false');
+
+        const inCards = active.querySelectorAll<HTMLElement>('.product-card');
+        gsap.fromTo(
+          inCards,
+          { y: 20, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: 'expo.out',
+          }
+        );
+      },
+    });
+
+    activeTab.classList.add('active');
+    activeTab.setAttribute('aria-selected', 'true');
+    inactiveTab.classList.remove('active');
+    inactiveTab.setAttribute('aria-selected', 'false');
+  }
+
+  tabMen?.addEventListener('click',   () => switchTab('men'));
+  tabWomen?.addEventListener('click', () => switchTab('women'));
+</script>

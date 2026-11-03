@@ -1,0 +1,122 @@
+---
+// Layout.astro — Base HTML shell
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title = 'Merazo — Cut with intent. Worn for years.',
+  description = 'Merazo crafts premium shirts for men and women. Oxford, linen, poplin, overshirts — built to last, designed to last.',
+  ogImage = '/og-image.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://merazo.com');
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Script to set JS class immediately to prevent FOUC / content collapse -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Primary Meta -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0A0A0A" />
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:title"       content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta property="og:site_name"   content="Merazo" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:site"        content="@merazo" />
+    <meta name="twitter:title"       content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image"       content={ogImage} />
+
+    <!-- JSON-LD Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Merazo",
+        "url": "https://merazo.com",
+        "logo": "https://merazo.com/favicon.svg",
+        "description": "Premium luxury shirts for men and women. Cut with intent. Worn for years.",
+        "sameAs": [
+          "https://instagram.com/merazo",
+          "https://twitter.com/merazo"
+        ]
+      }
+    </script>
+
+    <!-- Preload Anybody Display variable font -->
+    <link rel="preload" href="/fonts/anybody-var.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,700;0,800;0,900;1,800&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon & Brand Icons (Part F) -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
+
+  <body>
+    <!-- Film Grain Overlay -->
+    <div id="grain" aria-hidden="true"></div>
+
+    <!-- Custom Cursor (desktop only) -->
+    <div id="cursor-dot"  aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"><span>VIEW</span></div>
+
+    <!-- Right-Edge Section Progress Indicator (Part A-5) -->
+    <aside id="section-progress" aria-hidden="true">
+      <span class="progress-indicator__number">01</span>
+      <div class="progress-indicator__bar">
+        <div class="progress-indicator__fill"></div>
+      </div>
+      <span class="text-mono" style="font-size:9px;color:rgba(255,255,255,0.4);mix-blend-mode:difference;">08</span>
+    </aside>
+
+    <!-- Main Content Slot -->
+    <slot />
+
+    <!-- Animation & Lifecycle Scripts -->
+    <script>
+      import { initAll, cleanup } from '../scripts/motion';
+
+      // Support direct execution, DOMContentLoaded, and Astro View Transitions
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => initAll());
+      } else {
+        initAll();
+      }
+
+      document.addEventListener('astro:page-load', () => initAll());
+      document.addEventListener('astro:before-swap', () => cleanup());
+    </script>
+  </body>
+</html>
